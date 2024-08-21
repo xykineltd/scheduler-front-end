@@ -22,27 +22,44 @@ const getCalendarViewLabel = (x = "month") => {
 };
 
 export default function CalendarHeader() {
-  const { calendarView, setCalendarView, handleModal, currentMonth, setCurrentMonth } = useCalendarContext();
+  const {
+    calendarView,
+    setCalendarView,
+    handleModal,
+    currentMonth,
+    setCurrentMonth,
+    handleMonthChange,
+  } = useCalendarContext();
 
   // Check if currentMonth is a valid Date object
-  const validCurrentMonth = currentMonth && isValid(currentMonth) ? currentMonth : new Date();
-  
+  const validCurrentMonth =
+    currentMonth && isValid(currentMonth) ? currentMonth : new Date();
+
   // Format the current month and year for display
   const formattedMonthYear = format(validCurrentMonth, "MMMM yyyy");
 
+  const formattedDisplay = () => {
+    if (calendarView === "month") return format(validCurrentMonth, "MMMM");
+    return "";
+  };
+
   const handlePrevMonth = () => {
-    setCurrentMonth(subMonths(validCurrentMonth, 1));
+    if (calendarView === "month")
+      setCurrentMonth(subMonths(validCurrentMonth, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(addMonths(validCurrentMonth, 1));
+    if (calendarView === "month")
+      setCurrentMonth(addMonths(validCurrentMonth, 1));
   };
 
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          <time dateTime={format(validCurrentMonth, "yyyy-MM")}>{formattedMonthYear}</time>
+          <time dateTime={format(validCurrentMonth, "yyyy-MM")}>
+            {formattedMonthYear}
+          </time>
         </h1>
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
@@ -51,14 +68,13 @@ export default function CalendarHeader() {
               className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
               onClick={handlePrevMonth}
             >
-              <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <button
               type="button"
               className="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
             >
-              {toSentenceCase(calendarView)}
+              {toSentenceCase(formattedDisplay())}
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
