@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -5,6 +6,7 @@ import {
   ChevronRightIcon,
   EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
+import { format, addMonths, subMonths, isValid } from "date-fns";
 import { useCalendarContext } from "./calendar-context";
 import { toSentenceCase } from "../common/functions";
 
@@ -20,18 +22,34 @@ const getCalendarViewLabel = (x = "month") => {
 };
 
 export default function CalendarHeader() {
-  const { calendarView, setCalendarView, handleModal } = useCalendarContext();
+  const { calendarView, setCalendarView, handleModal, currentMonth, setCurrentMonth } = useCalendarContext();
+
+  // Check if currentMonth is a valid Date object
+  const validCurrentMonth = currentMonth && isValid(currentMonth) ? currentMonth : new Date();
+  
+  // Format the current month and year for display
+  const formattedMonthYear = format(validCurrentMonth, "MMMM yyyy");
+
+  const handlePrevMonth = () => {
+    setCurrentMonth(subMonths(validCurrentMonth, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(addMonths(validCurrentMonth, 1));
+  };
+
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          <time dateTime="2022-01">January 2022</time>
+          <time dateTime={format(validCurrentMonth, "yyyy-MM")}>{formattedMonthYear}</time>
         </h1>
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
+              onClick={handlePrevMonth}
             >
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -46,6 +64,7 @@ export default function CalendarHeader() {
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
+              onClick={handleNextMonth}
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
