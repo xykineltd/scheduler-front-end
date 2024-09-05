@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Select from "react-select";
 
-export default function ScheduleForm({
+export default function CreateItenaryForm({
   attendeesList = [],
   handleCreateSchedule = () => {},
 }) {
@@ -35,7 +35,7 @@ export default function ScheduleForm({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="mt-6 max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <label
@@ -164,7 +164,7 @@ export default function ScheduleForm({
             type="submit"
             className="px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Create Schedule
+            Create Itenary
           </button>
         </div>
       </form>

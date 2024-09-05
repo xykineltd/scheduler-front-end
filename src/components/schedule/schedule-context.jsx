@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { useApplicationContext } from "../../contexts/ApplicationContext";
-import ScheduleForm from "./widgets/create-schedule";
 
 const initialState = {
   modalDetail: {
@@ -50,7 +49,7 @@ function ScheduleContextProvider({ children }) {
   const modalDetails = {
     addSchedule: {
       title: "Create Schedule",
-      component: <ScheduleForm handleCreateSchedule={handleCreateSchedule} />,
+      component: <div handleCreateSchedule={handleCreateSchedule}></div>,
     },
   };
 

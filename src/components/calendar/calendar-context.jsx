@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useeducer, useReducer } from "react";
-import ScheduleForm from "../schedule/widgets/create-schedule";
+import React, { createContext, useContext, useReducer } from "react";
 import { useApplicationContext } from "../../contexts/ApplicationContext";
 import { changeMonth } from "../../Utils/dateUtils";
 
@@ -80,7 +79,7 @@ function CalendarContextProvider({ children }) {
   const modalDetails = {
     addSchedule: {
       title: "Create Schedule",
-      component: <ScheduleForm handleCreateSchedule={handleCreateSchedule} />,
+      component: <div handleCreateSchedule={handleCreateSchedule} />,
     },
   };
 

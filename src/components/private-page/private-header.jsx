@@ -7,8 +7,8 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const user = {
   name: "Tom Cook",
@@ -16,13 +16,7 @@ const user = {
   imageUrl:
     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
 };
-const navigation = [
-  { name: "Dashboard", href: "dashboard", current: true },
-  { name: "Calendar", href: "calendar", current: false },
-  { name: "Schedule", href: "schedule", current: false },
-  { name: "Book flight", href: "book-flight", current: false },
-  { name: "Notification", href: "notification", current: false },
-];
+
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Sign out", href: "#" },
@@ -33,6 +27,46 @@ function classNames(...classes) {
 }
 
 export default function PrivateHeader() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  const navigation = [
+    {
+      name: "Dashboard",
+      href: "dashboard",
+      current: currentPath === "/dashboard",
+    },
+    {
+      name: "Itenary Calendar",
+      href: "calendar",
+      current: currentPath === "/calendar",
+    },
+    {
+      name: "My Itenary",
+      href: "my-itenary",
+      current: currentPath === "/my-itenary",
+    },
+    // {
+    //   name: "Travel Itenary",
+    //   href: "book-flight",
+    //   current: currentPath === "/book-flight",
+    // },
+    {
+      name: "Itenary Notification",
+      href: "notification",
+      current: currentPath === "/notification",
+    },
+  ];
+
+  const smallScreenNavigation = [
+    ...navigation,
+    {
+      name: "Create Itenary",
+      href: "create-itenary",
+      current: currentPath === "/create-itenary",
+    },
+  ];
+
   return (
     <Disclosure as="header" className="bg-white shadow">
       <div className="mx-auto max-w-7xl px-1 sm:px-2 lg:divide-y lg:divide-gray-200 lg:px-0">
@@ -46,28 +80,6 @@ export default function PrivateHeader() {
               />
             </div>
           </div>
-          {/* <div className="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0">
-            <div className="w-full sm:max-w-xs">
-              <label htmlFor="search" className="sr-only">
-                Search
-              </label>
-              <div className="relative">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <MagnifyingGlassIcon
-                    aria-hidden="true"
-                    className="h-5 w-5 text-gray-400"
-                  />
-                </div>
-                <input
-                  id="search"
-                  name="search"
-                  type="search"
-                  placeholder="Search"
-                  className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-          </div> */}
           <div className="relative z-10 flex items-center lg:hidden">
             {/* Mobile menu button */}
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -82,6 +94,33 @@ export default function PrivateHeader() {
                 className="hidden h-6 w-6 group-data-[open]:block"
               />
             </DisclosureButton>
+          </div>
+          <div className="hidden lg:relative lg:z-10 lg:flex lg:items-center lg:justify-between lg:w-full">
+            <nav aria-label="Global" className="flex space-x-8">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  aria-current={item.current ? "page" : undefined}
+                  className={classNames(
+                    item.current
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-900 hover:bg-blue-500 hover:text-white",
+                    "inline-flex items-center rounded-md px-3 py-2 text-sm font-medium"
+                  )}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex items-center">
+              <Link
+                to="/create-itenary"
+                className="ml-6 bg-blue-600 text-white inline-flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-blue-500"
+              >
+                Create Itinerary
+              </Link>
+            </div>
           </div>
           <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
             {/* Profile dropdown */}
@@ -103,57 +142,37 @@ export default function PrivateHeader() {
               >
                 {userNavigation.map((item) => (
                   <MenuItem key={item.name}>
-                    <a
-                      href={item.href}
+                    <Link
+                      to={item.href}
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   </MenuItem>
                 ))}
               </MenuItems>
             </Menu>
           </div>
         </div>
-        <nav
-          aria-label="Global"
-          className="hidden lg:flex lg:space-x-8 lg:py-2"
-        >
-          {navigation.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              className={classNames(
-                item.current
-                  ? "bg-gray-100 text-gray-900"
-                  : "text-gray-900 hover:bg-gray-50 hover:text-gray-900",
-                "inline-flex items-center rounded-md px-3 py-2 text-sm font-medium"
-              )}
-            >
-              {item.name}
-            </a>
-          ))}
-        </nav>
       </div>
 
       <DisclosurePanel as="nav" aria-label="Global" className="lg:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item) => (
-            <DisclosureButton
+          {smallScreenNavigation.map((item) => (
+            <Link
               key={item.name}
               as="a"
-              href={item.href}
+              to={item.href}
               aria-current={item.current ? "page" : undefined}
               className={classNames(
                 item.current
-                  ? "bg-gray-100 text-gray-900"
-                  : "text-gray-900 hover:bg-gray-50 hover:text-gray-900",
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-900 hover:bg-blue-500 hover:text-white",
                 "block rounded-md px-3 py-2 text-base font-medium"
               )}
             >
               {item.name}
-            </DisclosureButton>
+            </Link>
           ))}
         </div>
         <div className="border-t border-gray-200 pb-3 pt-4">

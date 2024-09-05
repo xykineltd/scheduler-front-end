@@ -57,9 +57,11 @@ export default function CalendarHeader() {
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          <time dateTime={format(validCurrentMonth, "yyyy-MM")}>
-            {formattedMonthYear}
-          </time>
+          {calendarView === "month" && (
+            <time dateTime={format(validCurrentMonth, "yyyy-MM")}>
+              {formattedMonthYear}
+            </time>
+          )}
         </h1>
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
@@ -121,13 +123,6 @@ export default function CalendarHeader() {
               </MenuItems>
             </Menu>
             <div className="ml-6 h-6 w-px bg-gray-300" />
-            <button
-              onClick={() => handleModal("addSchedule")}
-              type="button"
-              className="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Add schedule
-            </button>
           </div>
           <Menu as="div" className="relative ml-6 md:hidden">
             <MenuButton className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
@@ -139,13 +134,6 @@ export default function CalendarHeader() {
               transition
               className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
             >
-              <div className="py-1">
-                <MenuItem>
-                  <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
-                    Create schedule
-                  </span>
-                </MenuItem>
-              </div>
               <div className="py-1">
                 <MenuItem>
                   <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
