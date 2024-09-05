@@ -19,8 +19,6 @@ const septemberEvents = generateRandomEventsForMonth(2024, 8, 4);
 const octoberEvents = generateRandomEventsForMonth(2024, 9, 4);
 
 const CalendarMonthView = () => {
-  const { setIsDrawerOpen } = useApplicationContext();
-
   const { currentMonth, selectedDate, setSelectedDate, setDays, days } =
     useCalendarContext();
 

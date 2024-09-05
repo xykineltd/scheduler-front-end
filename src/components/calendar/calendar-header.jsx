@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -14,11 +14,9 @@ import {
   subDays,
   addWeeks,
   subWeeks,
-  startOfMonth,
   isValid,
 } from "date-fns";
 import { useCalendarContext } from "./calendar-context";
-import { toSentenceCase } from "../common/functions";
 
 const calendarViewMenu = [
   { label: "Day view", value: "day" },
@@ -35,12 +33,10 @@ export default function CalendarHeader() {
   const {
     calendarView,
     setCalendarView,
-    handleModal,
     currentDate,
     setCurrentDate,
     currentMonth,
     setCurrentMonth,
-    handleMonthChange,
   } = useCalendarContext();
 
   const validCurrentDate =
@@ -51,7 +47,6 @@ export default function CalendarHeader() {
     currentMonth && isValid(currentMonth) ? currentMonth : new Date();
 
   // Format the current month and year for display
-  const formattedMonthYear = format(validCurrentMonth, "MMMM yyyy");
 
   const getWeekOfMonthLabel = (date) => {
     const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
