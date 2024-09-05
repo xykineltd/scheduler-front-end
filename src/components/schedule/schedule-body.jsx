@@ -34,7 +34,7 @@ export default function ScheduleBody() {
 
       {/* Main content area */}
       <div className="flex flex-col flex-grow">
-        <ScheduleHeader />
+        {/* <ScheduleHeader /> */}
         <ScheduleList />
       </div>
 

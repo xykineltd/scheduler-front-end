@@ -1,71 +1,53 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import React from "react";
 import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EllipsisHorizontalIcon,
-} from "@heroicons/react/20/solid";
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  addDays,
+  eachDayOfInterval,
+  format,
+  isToday,
+  isSameMonth,
+  parseISO,
+} from "date-fns";
 
-const months = [
-  {
-    name: "January",
-    days: [
-      { date: "2021-12-27" },
-      { date: "2021-12-28" },
-      { date: "2021-12-29" },
-      { date: "2021-12-30" },
-      { date: "2021-12-31" },
-      { date: "2022-01-01", isCurrentMonth: true },
-      { date: "2022-01-02", isCurrentMonth: true },
-      { date: "2022-01-03", isCurrentMonth: true },
-      { date: "2022-01-04", isCurrentMonth: true },
-      { date: "2022-01-05", isCurrentMonth: true },
-      { date: "2022-01-06", isCurrentMonth: true },
-      { date: "2022-01-07", isCurrentMonth: true },
-      { date: "2022-01-08", isCurrentMonth: true },
-      { date: "2022-01-09", isCurrentMonth: true },
-      { date: "2022-01-10", isCurrentMonth: true },
-      { date: "2022-01-11", isCurrentMonth: true },
-      { date: "2022-01-12", isCurrentMonth: true, isToday: true },
-      { date: "2022-01-13", isCurrentMonth: true },
-      { date: "2022-01-14", isCurrentMonth: true },
-      { date: "2022-01-15", isCurrentMonth: true },
-      { date: "2022-01-16", isCurrentMonth: true },
-      { date: "2022-01-17", isCurrentMonth: true },
-      { date: "2022-01-18", isCurrentMonth: true },
-      { date: "2022-01-19", isCurrentMonth: true },
-      { date: "2022-01-20", isCurrentMonth: true },
-      { date: "2022-01-21", isCurrentMonth: true },
-      { date: "2022-01-22", isCurrentMonth: true },
-      { date: "2022-01-23", isCurrentMonth: true },
-      { date: "2022-01-24", isCurrentMonth: true },
-      { date: "2022-01-25", isCurrentMonth: true },
-      { date: "2022-01-26", isCurrentMonth: true },
-      { date: "2022-01-27", isCurrentMonth: true },
-      { date: "2022-01-28", isCurrentMonth: true },
-      { date: "2022-01-29", isCurrentMonth: true },
-      { date: "2022-01-30", isCurrentMonth: true },
-      { date: "2022-01-31", isCurrentMonth: true },
-      { date: "2022-02-01" },
-      { date: "2022-02-02" },
-      { date: "2022-02-03" },
-      { date: "2022-02-04" },
-      { date: "2022-02-05" },
-      { date: "2022-02-06" },
-    ],
-  },
-  // More months...
-];
+const generateYearCalendar = (year) => {
+  const months = [];
+  for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+    const start = startOfMonth(new Date(year, monthIndex));
+    const end = endOfMonth(start);
+    const startDate = startOfWeek(start, { weekStartsOn: 1 });
+    const endDate = endOfWeek(end, { weekStartsOn: 1 });
+
+    const days = eachDayOfInterval({ start: startDate, end: endDate }).map(
+      (date) => ({
+        date: format(date, "yyyy-MM-dd"),
+        isCurrentMonth: isSameMonth(date, start),
+        isToday: isToday(date),
+      })
+    );
+
+    months.push({
+      name: format(start, "MMMM"),
+      days: days,
+    });
+  }
+  return months;
+};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function CalendarYearView() {
+  const year = new Date().getFullYear(); // Change the year if needed
+  const months = generateYearCalendar(year);
+
   return (
     <div>
       <div className="bg-white">
-        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-16 sm:grid-cols-2 sm:px-6 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-4 sm:grid-cols-2 sm:px-2 xl:max-w-none xl:grid-cols-3 xl:px-8 2xl:grid-cols-4">
           {months.map((month) => (
             <section key={month.name} className="text-center">
               <h2 className="text-sm font-semibold text-gray-900">
@@ -103,7 +85,7 @@ export default function CalendarYearView() {
                         "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
                       )}
                     >
-                      {day.date.split("-").pop().replace(/^0/, "")}
+                      {parseISO(day.date).getDate()}
                     </time>
                   </button>
                 ))}

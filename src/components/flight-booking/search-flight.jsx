@@ -44,19 +44,19 @@ export default function FlightSearchForm({ onNext }) {
         <div className="flex space-x-4">
           <button
             type="button"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            className="px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             One way
           </button>
           <button
             type="button"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md"
+            className="px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Round trip
           </button>
           <button
             type="button"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            className="px-2 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Multi city
           </button>

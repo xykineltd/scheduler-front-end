@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CalendarDayView from "./calendar-views/calendar-view";
+import CalendarView from "./calendar-views/calendar-view";
 import CalendarHeader from "./calendar-header";
 import CalenderSideBar from "./calendar-side-bar";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -35,7 +35,10 @@ export default function CalendarBody() {
       {/* Main content area */}
       <div className="flex flex-col flex-grow">
         <CalendarHeader />
-        <CalendarDayView />
+        <CalendarView/>
+
+
+
       </div>
 
       {/* Hamburger button for opening the sidebar in mobile view */}
