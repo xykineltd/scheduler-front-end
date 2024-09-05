@@ -81,16 +81,6 @@ export default function CalendarHeader() {
     }
   };
 
-  const handlePrevMonth = () => {
-    if (calendarView === "month")
-      setCurrentMonth(subMonths(validCurrentMonth, 1));
-  };
-
-  const handleNextMonth = () => {
-    if (calendarView === "month")
-      setCurrentMonth(addMonths(validCurrentMonth, 1));
-  };
-
   const handlePrev = () => {
     switch (calendarView) {
       case "month":
@@ -127,11 +117,7 @@ export default function CalendarHeader() {
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          {calendarView === "month" && (
-            <time dateTime={format(validCurrentMonth, "yyyy-MM")}>
-              {formattedDisplay()}
-            </time>
-          )}
+          <time>{formattedDisplay()}</time>
         </h1>
         <div className="flex items-center">
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
@@ -146,7 +132,7 @@ export default function CalendarHeader() {
               type="button"
               className="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
             >
-              {toSentenceCase(formattedDisplay())}
+              {formattedDisplay()}
             </button>
             <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
