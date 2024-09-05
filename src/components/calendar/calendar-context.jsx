@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer, useState } from "react";
 import { useApplicationContext } from "../../contexts/ApplicationContext";
 import { changeMonth } from "../../Utils/dateUtils";
 
@@ -17,7 +17,7 @@ const initialState = {
 };
 
 const calendarActions = {
-  setCalendarView: "SET_Calendar_VIEW",
+  setCalendarView: "SET_CALENDAR_VIEW",
   setScheduleDetail: "SET_SCHEDULE_DETAIL",
   setModalDetail: "SET_MODAL_DETAIL",
   setCurrentMonth: "SET_CURRENT_MONTH",
@@ -39,14 +39,16 @@ const calendarReducer = (state, action) => {
       return { ...state, calendarView: payload.calendarView };
     case calendarActions.setScheduleDetail:
       return { ...state, scheduleDetail: payload.scheduleDetail };
-
     case calendarActions.setModalDetail:
       return { ...state, modalDetail: payload.modalDetail };
+    default:
+      return state;
   }
 };
 
 function CalendarContextProvider({ children }) {
   const [state, dispatch] = useReducer(calendarReducer, initialState);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const dispatchAction = (type, payload) => dispatch({ type, payload });
 
@@ -96,6 +98,8 @@ function CalendarContextProvider({ children }) {
     <CalendarContext.Provider
       value={{
         ...state,
+        currentDate,
+        setCurrentDate,
         setCalendarView,
         handleModal,
         handleMonthChange,
