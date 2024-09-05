@@ -6,7 +6,17 @@ import {
   ChevronRightIcon,
   EllipsisHorizontalIcon,
 } from "@heroicons/react/20/solid";
-import { format, addMonths, subMonths, isValid } from "date-fns";
+import {
+  format,
+  addMonths,
+  subMonths,
+  addDays,
+  subDays,
+  addWeeks,
+  subWeeks,
+  startOfMonth,
+  isValid,
+} from "date-fns";
 import { useCalendarContext } from "./calendar-context";
 import { toSentenceCase } from "../common/functions";
 
@@ -26,10 +36,15 @@ export default function CalendarHeader() {
     calendarView,
     setCalendarView,
     handleModal,
+    currentDate,
+    setCurrentDate,
     currentMonth,
     setCurrentMonth,
     handleMonthChange,
   } = useCalendarContext();
+
+  const validCurrentDate =
+    currentDate && isValid(currentDate) ? currentDate : new Date();
 
   // Check if currentMonth is a valid Date object
   const validCurrentMonth =
@@ -38,9 +53,32 @@ export default function CalendarHeader() {
   // Format the current month and year for display
   const formattedMonthYear = format(validCurrentMonth, "MMMM yyyy");
 
+  const getWeekOfMonthLabel = (date) => {
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const startDay = startOfMonth.getDay(); // Day of the week the month starts on
+    const currentDay = date.getDate();
+
+    // Calculate which week of the month it is
+    let weekNumber = Math.floor((currentDay + startDay - 1) / 7) + 1;
+
+    if (weekNumber > 4) {
+      weekNumber = 1; // Reset to Week 1 for next month
+    }
+
+    return `Week ${weekNumber} of ${format(date, "MMMM")}`;
+  };
+
   const formattedDisplay = () => {
-    if (calendarView === "month") return format(validCurrentMonth, "MMMM");
-    return "";
+    switch (calendarView) {
+      case "month":
+        return format(validCurrentMonth, "MMMM");
+      case "week":
+        return getWeekOfMonthLabel(validCurrentDate);
+      case "day":
+        return format(validCurrentDate, "EEEE, MMMM d");
+      default:
+        return "";
+    }
   };
 
   const handlePrevMonth = () => {
@@ -53,13 +91,45 @@ export default function CalendarHeader() {
       setCurrentMonth(addMonths(validCurrentMonth, 1));
   };
 
+  const handlePrev = () => {
+    switch (calendarView) {
+      case "month":
+        setCurrentMonth(subMonths(validCurrentMonth, 1));
+        break;
+      case "week":
+        setCurrentDate(subWeeks(validCurrentDate, 1));
+        break;
+      case "day":
+        setCurrentDate(subDays(validCurrentDate, 1));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleNext = () => {
+    switch (calendarView) {
+      case "month":
+        setCurrentMonth(addMonths(validCurrentMonth, 1));
+        break;
+      case "week":
+        setCurrentDate(addWeeks(validCurrentDate, 1));
+        break;
+      case "day":
+        setCurrentDate(addDays(validCurrentDate, 1));
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
           {calendarView === "month" && (
             <time dateTime={format(validCurrentMonth, "yyyy-MM")}>
-              {formattedMonthYear}
+              {formattedDisplay()}
             </time>
           )}
         </h1>
@@ -68,7 +138,7 @@ export default function CalendarHeader() {
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
-              onClick={handlePrevMonth}
+              onClick={handlePrev}
             >
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -82,7 +152,7 @@ export default function CalendarHeader() {
             <button
               type="button"
               className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
-              onClick={handleNextMonth}
+              onClick={handleNext}
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />

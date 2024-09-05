@@ -14,7 +14,6 @@ export const generateRandomEventsForMonth = (
 ) => {
   const startDate = startOfMonth(new Date(year, month));
   const endDate = endOfMonth(new Date(year, month));
-
   const days = eachDayOfInterval({ start: startDate, end: endDate });
   const events = [];
 
