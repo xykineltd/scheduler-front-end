@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {loginUser} from "../../auth/auth_helper.js";
 
 const navigation = [
   { name: "Home ", href: "/" },
@@ -10,7 +11,9 @@ const navigation = [
 
 export default function PublicHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const handleGetStartedClick = () => {
+    loginUser().then((r) => console.log(r));
+  };
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -51,9 +54,9 @@ export default function PublicHeader() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <button onClick={handleGetStartedClick} className="text-sm font-semibold leading-6 text-gray-900">
             Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          </button>
         </div>
       </nav>
       <Dialog
@@ -95,12 +98,12 @@ export default function PublicHeader() {
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="#"
+                <button
+                    onClick={handleGetStartedClick}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Log in
-                </a>
+                </button>
               </div>
             </div>
           </div>
