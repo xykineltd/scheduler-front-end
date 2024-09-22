@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {loginUser, logoutUser} from "../../auth/auth_helper.js";
 
 const user = {
   name: "Tom Cook",
@@ -19,7 +20,7 @@ const user = {
 
 const userNavigation = [
   { name: "Your Profile", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Sign out", href: "#", action: () => logoutUser().then((r) => console.log(r))},
 ];
 
 function classNames(...classes) {
@@ -98,9 +99,9 @@ export default function PrivateHeader() {
           <div className="hidden lg:relative lg:z-10 lg:flex lg:items-center lg:justify-between lg:w-full">
             <nav aria-label="Global" className="flex space-x-8">
               {navigation.map((item) => (
-                <Link
+                <button
                   key={item.name}
-                  to={item.href}
+                  onClick={item.action}
                   aria-current={item.current ? "page" : undefined}
                   className={classNames(
                     item.current
@@ -110,7 +111,7 @@ export default function PrivateHeader() {
                   )}
                 >
                   {item.name}
-                </Link>
+                </button>
               ))}
             </nav>
             <div className="flex items-center">
