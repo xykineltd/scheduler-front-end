@@ -38,12 +38,12 @@ export default function PrivateHeader() {
       current: currentPath === "/dashboard",
     },
     {
-      name: "Itenary Calendar",
+      name: "Itinerary Calendar",
       href: "calendar",
       current: currentPath === "/calendar",
     },
     {
-      name: "My Itenary",
+      name: "My Itinerary",
       href: "my-itenary",
       current: currentPath === "/my-itenary",
     },
@@ -53,7 +53,7 @@ export default function PrivateHeader() {
     //   current: currentPath === "/book-flight",
     // },
     {
-      name: "Itenary Notification",
+      name: "Itinerary Notification",
       href: "notification",
       current: currentPath === "/notification",
     },
@@ -62,7 +62,7 @@ export default function PrivateHeader() {
   const smallScreenNavigation = [
     ...navigation,
     {
-      name: "Create Itenary",
+      name: "Create Itinerary",
       href: "create-itenary",
       current: currentPath === "/create-itenary",
     },

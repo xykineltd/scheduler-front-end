@@ -23,7 +23,7 @@ export default function PublicHeader() {
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">
-              FRIS Meeting Schedule, Itenary and Notification System{" "}
+              FIRS Meeting Schedule, Itinerary and Notification System{" "}
             </span>
             <img
               alt=""
