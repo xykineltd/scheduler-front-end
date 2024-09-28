@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useState } from "react";
 import { isEmpty } from "lodash";
+import {getUser} from "../auth/auth_helper.js";
 
 export const userRoles = {
   VENDOR: "vendor",
@@ -17,6 +18,19 @@ export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [authCompanyCode, setAuthCompanyCode] = useState(null);
   const [code, setCode] = useState("");
+
+
+  getUser()
+      .then((data) => {
+        if (data.profile.email !== user?.email) setUser(data.profile);
+        if (data.access_token) {
+          localStorage.setItem("token", JSON.stringify(data.access_token));
+        }
+      })
+      .catch((error) => {
+        console.log({ success: false, error: error.message });
+      })
+      .finally(() => {});
 
   const logout = () => {
     localStorage.removeItem("centralizedCompanyCode");

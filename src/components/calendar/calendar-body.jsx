@@ -10,7 +10,9 @@ import { useCalendarContext } from "./calendar-context";
 export default function CalendarBody() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const { modalDetail, drawerTitle } = useCalendarContext();
+  const { modalDetail, events, drawerTitle } = useCalendarContext();
+
+    console.log("events-->", events)
 
   return (
     <div className="flex">

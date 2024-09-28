@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import CalendarContextProvider from "./calendar-context";
+import CalendarContextProvider, {useCalendarContext} from "./calendar-context";
 
 export default function Calendar() {
   return (

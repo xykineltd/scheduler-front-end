@@ -29,7 +29,7 @@ const userManager = new UserManager(settings);
 
 export function clearLocalStorage() {
   localStorage.removeItem("token");
-  localStorage.removeItem("companyCode");
+  // localStorage.removeItem("companyCode");
 }
 
 // Add event listeners to handle token expiration

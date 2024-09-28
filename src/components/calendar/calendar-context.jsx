@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useReducer, useState } from "react";
 import { useApplicationContext } from "../../contexts/ApplicationContext";
 import { changeMonth } from "../../Utils/dateUtils";
+import {getQueryMethod} from "../../Utils/common";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 const CalendarContext = createContext(null);
 
@@ -94,12 +96,24 @@ function CalendarContextProvider({ children }) {
     setCurrentMonth(changeMonth(state.currentMonth, offset));
   };
 
+  const {
+    data: events,
+    error: errorGettingPaymentinfos,
+    isLoading: loadingPaymentinfos,
+    refetch: refetchPaymentinfos,
+    isFetching: isFetchingPaymentinfos,
+  } = useQuery({
+    queryKey: ["events"],
+    queryFn: () => getQueryMethod("get-users-for-event/66ef7f393f934778f3b97d8b"),
+  });
+
   return (
     <CalendarContext.Provider
       value={{
         ...state,
         currentDate,
         setCurrentDate,
+        events,
         setCalendarView,
         handleModal,
         handleMonthChange,

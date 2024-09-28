@@ -19,7 +19,7 @@ const user = {
 };
 
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
+  { name: "Your Profile", href: "#", action: () => console.log("implementation not available") },
   { name: "Sign out", href: "#", action: () => logoutUser().then((r) => console.log(r))},
 ];
 
@@ -31,20 +31,25 @@ export default function PrivateHeader() {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  const navigate  = useNavigate();
+
   const navigation = [
     {
       name: "Dashboard",
       href: "dashboard",
+      action: () => navigate("dashboard"),
       current: currentPath === "/dashboard",
     },
     {
       name: "Itinerary Calendar",
       href: "calendar",
+      action: () => navigate("calendar"),
       current: currentPath === "/calendar",
     },
     {
       name: "My Itinerary",
       href: "my-itenary",
+      action: () => navigate("my-itenary"),
       current: currentPath === "/my-itenary",
     },
     // {
@@ -55,6 +60,7 @@ export default function PrivateHeader() {
     {
       name: "Itinerary Notification",
       href: "notification",
+      action: () => navigate("notification"),
       current: currentPath === "/notification",
     },
   ];
@@ -64,6 +70,7 @@ export default function PrivateHeader() {
     {
       name: "Create Itinerary",
       href: "create-itenary",
+      action: () => navigate("create-itenary"),
       current: currentPath === "/create-itenary",
     },
   ];
@@ -143,12 +150,12 @@ export default function PrivateHeader() {
               >
                 {userNavigation.map((item) => (
                   <MenuItem key={item.name}>
-                    <Link
-                      to={item.href}
+                    <button
+                      onClick={item.action}
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                     >
                       {item.name}
-                    </Link>
+                    </button>
                   </MenuItem>
                 ))}
               </MenuItems>
@@ -160,10 +167,9 @@ export default function PrivateHeader() {
       <DisclosurePanel as="nav" aria-label="Global" className="lg:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {smallScreenNavigation.map((item) => (
-            <Link
+            <button
               key={item.name}
-              as="a"
-              to={item.href}
+              onClick={item.action}
               aria-current={item.current ? "page" : undefined}
               className={classNames(
                 item.current
@@ -173,7 +179,7 @@ export default function PrivateHeader() {
               )}
             >
               {item.name}
-            </Link>
+            </button>
           ))}
         </div>
         <div className="border-t border-gray-200 pb-3 pt-4">
