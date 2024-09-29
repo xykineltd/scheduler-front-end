@@ -1,58 +1,29 @@
 "use client";
 
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition  } from "@headlessui/react";
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  EllipsisHorizontalIcon,
+  XMarkIcon,
+  ClockIcon,
 } from "@heroicons/react/20/solid";
-import { useEffect, useRef } from "react";
+import {  useEffect, useRef, useState } from "react";
+import {
+  format,
+  startOfMonth,
+  getDaysInMonth,
+  addDays,
+  subDays,
+  endOfMonth,
+  isToday,
+  isSameDay,
+  startOfWeek,
+  endOfWeek,
+  addMonths, 
+  subMonths,  
+} from "date-fns";
+import { useCalendarContext } from "../calendar-context.jsx";
 
-const days = [
-  { date: "2021-12-27" },
-  { date: "2021-12-28" },
-  { date: "2021-12-29" },
-  { date: "2021-12-30" },
-  { date: "2021-12-31" },
-  { date: "2022-01-01", isCurrentMonth: true },
-  { date: "2022-01-02", isCurrentMonth: true },
-  { date: "2022-01-03", isCurrentMonth: true },
-  { date: "2022-01-04", isCurrentMonth: true },
-  { date: "2022-01-05", isCurrentMonth: true },
-  { date: "2022-01-06", isCurrentMonth: true },
-  { date: "2022-01-07", isCurrentMonth: true },
-  { date: "2022-01-08", isCurrentMonth: true },
-  { date: "2022-01-09", isCurrentMonth: true },
-  { date: "2022-01-10", isCurrentMonth: true },
-  { date: "2022-01-11", isCurrentMonth: true },
-  { date: "2022-01-12", isCurrentMonth: true },
-  { date: "2022-01-13", isCurrentMonth: true },
-  { date: "2022-01-14", isCurrentMonth: true },
-  { date: "2022-01-15", isCurrentMonth: true },
-  { date: "2022-01-16", isCurrentMonth: true },
-  { date: "2022-01-17", isCurrentMonth: true },
-  { date: "2022-01-18", isCurrentMonth: true },
-  { date: "2022-01-19", isCurrentMonth: true },
-  { date: "2022-01-20", isCurrentMonth: true, isToday: true },
-  { date: "2022-01-21", isCurrentMonth: true },
-  { date: "2022-01-22", isCurrentMonth: true, isSelected: true },
-  { date: "2022-01-23", isCurrentMonth: true },
-  { date: "2022-01-24", isCurrentMonth: true },
-  { date: "2022-01-25", isCurrentMonth: true },
-  { date: "2022-01-26", isCurrentMonth: true },
-  { date: "2022-01-27", isCurrentMonth: true },
-  { date: "2022-01-28", isCurrentMonth: true },
-  { date: "2022-01-29", isCurrentMonth: true },
-  { date: "2022-01-30", isCurrentMonth: true },
-  { date: "2022-01-31", isCurrentMonth: true },
-  { date: "2022-02-01" },
-  { date: "2022-02-02" },
-  { date: "2022-02-03" },
-  { date: "2022-02-04" },
-  { date: "2022-02-05" },
-  { date: "2022-02-06" },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -62,6 +33,11 @@ export default function CalendarDayView() {
   const container = useRef(null);
   const containerNav = useRef(null);
   const containerOffset = useRef(null);
+
+  const { currentDate, selectedDate, setSelectedDate, setCurrentDate } = useCalendarContext();  
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     // Set the container scroll position based on the current time.
@@ -74,6 +50,50 @@ export default function CalendarDayView() {
       1440;
   }, []);
 
+  // Function to generate all days for the calendar, including previous and next month's days
+const generateDaysInMonth = (date) => {
+  const days = [];
+  const startDay = startOfMonth(date);
+  const endDay = endOfMonth(date);
+ 
+  const firstDayOfWeek = startOfWeek(startDay);
+  const lastDayOfWeek = endOfWeek(endDay);
+  // Fill the days from the previous month
+  let currentDay = firstDayOfWeek;
+  while (currentDay <= lastDayOfWeek) {
+    days.push({
+      date: currentDay,
+      isToday: isToday(currentDay),
+      isSelected: isSameDay(currentDay, selectedDate),
+      isCurrentMonth: currentDay.getMonth() === date.getMonth(),
+    });
+    currentDay = addDays(currentDay, 1);
+  }
+  return days;
+};
+  const days = generateDaysInMonth(currentDate); 
+  const handlePreviousMonth = () => {
+    const newDate = subMonths(currentDate, 1);
+    console.log("Navigating to previous month:", newDate); 
+    setCurrentDate(newDate);
+  };
+  const handleNextMonth = () => {
+    const newDate = addMonths(currentDate, 1);
+    console.log("Navigating to next month:", newDate); 
+    setCurrentDate(newDate);
+  };
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
+  };
+  const handleDayClick = (day) => {
+    setSelectedDate(day.date); 
+  };
+
   return (
     <div className="flex h-full flex-col">
       <div className="isolate flex flex-auto overflow-hidden bg-white">
@@ -82,71 +102,27 @@ export default function CalendarDayView() {
             ref={containerNav}
             className="sticky top-0 z-10 grid flex-none grid-cols-7 bg-white text-xs text-gray-500 shadow ring-1 ring-black ring-opacity-5 md:hidden"
           >
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>W</span>
-              {/* Default: "text-gray-900", Selected: "bg-gray-900 text-white", Today (Not Selected): "text-indigo-600", Today (Selected): "bg-indigo-600 text-white" */}
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                19
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-indigo-600">
-                20
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>F</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                21
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-base font-semibold text-white">
-                22
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>S</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                23
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>M</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                24
-              </span>
-            </button>
-            <button
-              type="button"
-              className="flex flex-col items-center pb-1.5 pt-3"
-            >
-              <span>T</span>
-              <span className="mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold text-gray-900">
-                25
-              </span>
-            </button>
+            {/* Rendering weekday headers with dynamic classes */}
+           {["W", "T", "F", "S", "S", "M", "T"].map((dayLabel, index) => (
+              <button
+                key={index}
+                type="button"
+                className="flex flex-col items-center pb-1.5 pt-3"
+              >
+                <span>{dayLabel}</span>
+                <span
+                  className={classNames(
+                    "mt-3 flex h-8 w-8 items-center justify-center rounded-full text-base font-semibold",
+                    index === 1 ? "text-indigo-600" : "text-gray-900",
+                    index === 3 && "bg-gray-900 text-white"
+                  )}
+                >
+                  {19 + index}
+                </span>
+              </button>
+            ))} 
           </div>
+          
           <div className="flex w-full flex-auto">
             <div className="w-14 flex-none bg-white ring-1 ring-gray-100" />
             <div className="grid flex-auto grid-cols-1 grid-rows-1">
@@ -156,151 +132,15 @@ export default function CalendarDayView() {
                 style={{ gridTemplateRows: "repeat(48, minmax(3.5rem, 1fr))" }}
               >
                 <div ref={containerOffset} className="row-end-1 h-7"></div>
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11AM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    12PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    1PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    2PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    3PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    4PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    5PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    6PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    7PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    8PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    9PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    10PM
-                  </div>
-                </div>
-                <div />
-                <div>
-                  <div className="sticky left-0 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
-                    11PM
-                  </div>
-                </div>
-                <div />
-              </div>
+                {/* Times */}
+                {Array.from({ length: 24 }, (_, i) => (
+                  <div key={i}>
+                    <div className="sticky left-0 z-20 -ml-14 -mt-2.5 w-14 pr-2 text-right text-xs leading-5 text-gray-400">
+                      {i % 12 === 0 ? '12AM' : `${i % 12} ${i < 12 ? 'AM' : 'PM'}`}
+                    </div>
+                    </div>
+                   ))}
+                   </div>
 
               {/* Events */}
               <ol
@@ -314,8 +154,8 @@ export default function CalendarDayView() {
                   style={{ gridRow: "74 / span 12" }}
                 >
                   <a
-                    href="#"
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-blue-50 p-2 text-xs leading-5 hover:bg-blue-100"
+                     onClick={() => handleEventClick({ title: 'Breakfast', time: '6:00 AM', description: 'Enjoy a hearty breakfast to start the day!' })}
                   >
                     <p className="order-1 font-semibold text-blue-700">
                       Breakfast
@@ -330,8 +170,9 @@ export default function CalendarDayView() {
                   style={{ gridRow: "92 / span 30" }}
                 >
                   <a
-                    href="#"
+                    
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-pink-50 p-2 text-xs leading-5 hover:bg-pink-100"
+                    onClick={() => handleEventClick({ title: 'Flight to Paris', time: '7:30 AM', description: 'Catch the flight to Paris for a business trip.' })}
                   >
                     <p className="order-1 font-semibold text-pink-700">
                       Flight to Paris
@@ -349,8 +190,9 @@ export default function CalendarDayView() {
                   style={{ gridRow: "134 / span 18" }}
                 >
                   <a
-                    href="#"
+                  
                     className="group absolute inset-1 flex flex-col overflow-y-auto rounded-lg bg-indigo-50 p-2 text-xs leading-5 hover:bg-indigo-100"
+                    onClick={() => handleEventClick({ title: 'Sight Seeing at The Eiffel Tower', time: '11:00 AM', description: 'Let us go have fun at the Eiffel Tower.' })}
                   >
                     <p className="order-1 font-semibold text-indigo-700">
                       Sightseeing
@@ -367,20 +209,61 @@ export default function CalendarDayView() {
             </div>
           </div>
         </div>
+
+        {isModalOpen && selectedEvent && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div
+              className="absolute inset-0 bg-black opacity-50"
+              onClick={handleCloseModal}
+            />
+            <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
+              <div className="relative w-screen max-w-md">
+                <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div className="bg-indigo-700 py-6 px-4 sm:px-6 relative">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-medium text-white">
+                        {selectedEvent.title}
+                      </h2>
+                      <button
+                        className="text-indigo-200 hover:text-white absolute right-4 top-4"
+                        onClick={handleCloseModal}
+                      >
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative flex-1 py-6 px-4 sm:px-6">
+                  <div className="bg-gray-100 p-4 rounded-lg shadow">
+                    <p className="text-gray-700">{selectedEvent.description}</p>
+                    <div className="mt-4 flex items-center">
+                      <ClockIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <time className="ml-2 text-sm text-gray-500">
+                        {selectedEvent.time}
+                      </time>
+                    </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
         <div className="hidden w-1/2 max-w-md flex-none border-l border-gray-100 px-8 py-10 md:block">
           <div className="flex items-center text-center text-gray-900">
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
+          <button type="button" className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={handlePreviousMonth}>
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            <div className="flex-auto text-sm font-semibold">January 2022</div>
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-            >
+            <div className="flex-auto text-sm font-semibold">{format(currentDate, 'MMMM yyyy')}</div>
+            <button type="button" className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500" onClick={handleNextMonth}>
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -408,18 +291,19 @@ export default function CalendarDayView() {
                     day.isCurrentMonth &&
                     !day.isToday &&
                     "text-gray-900",
-                  !day.isSelected &&
+                    !day.isSelected &&
                     !day.isCurrentMonth &&
                     !day.isToday &&
                     "text-gray-400",
-                  day.isToday && !day.isSelected && "text-indigo-600",
-                  dayIdx === 0 && "rounded-tl-lg",
-                  dayIdx === 6 && "rounded-tr-lg",
-                  dayIdx === days.length - 7 && "rounded-bl-lg",
-                  dayIdx === days.length - 1 && "rounded-br-lg"
-                )}
-              >
-                <time
+                    day.isToday && !day.isSelected && "text-indigo-600",
+                    dayIdx === 0 && "rounded-tl-lg",
+                    dayIdx === 6 && "rounded-tr-lg",
+                    dayIdx === days.length - 7 && "rounded-bl-lg",
+                    dayIdx === days.length - 1 && "rounded-br-lg"
+                     )}
+                    onClick={() => handleDayClick(day)} 
+                     >
+                    <time
                   dateTime={day.date}
                   className={classNames(
                     "mx-auto flex h-7 w-7 items-center justify-center rounded-full",
@@ -427,7 +311,7 @@ export default function CalendarDayView() {
                     day.isSelected && !day.isToday && "bg-gray-900"
                   )}
                 >
-                  {day.date.split("-").pop().replace(/^0/, "")}
+                  {format(day.date, 'd')}
                 </time>
               </button>
             ))}

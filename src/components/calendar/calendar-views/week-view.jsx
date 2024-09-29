@@ -68,12 +68,10 @@ export default function CalendarWeekView() {
                   key={index}
                   className="flex items-center justify-center py-3"
                 >
-                  <span className="relative flex items-center justify-center">
-                    {format(date, "EEE")}{" "}
+                  <span className="flex items-center">
+                  <span className="mr-1 text-gray-500">{format(date, 'EEE')}</span>
                     <span
-                      className={`relative items-center justify-center font-semibold ${
-                        isToday(date) ? "text-indigo-600" : "text-gray-900"
-                      }`}
+                      className={`font-semibold ${isToday(date) ? 'text-indigo-600' : 'text-gray-900'}`}
                     >
                       {/* Add circle around current day */}
                       <span
@@ -218,6 +216,7 @@ export default function CalendarWeekView() {
                     </div>
                   </div>
                   <div className="relative flex-1 py-6 px-4 sm:px-6">
+                  <div className="bg-gray-100 p-4 rounded-lg shadow">
                     <p className="text-gray-700">{selectedEvent.description}</p>
                     <div className="mt-4 flex items-center">
                       <ClockIcon
@@ -234,6 +233,7 @@ export default function CalendarWeekView() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       )}
     </div>
