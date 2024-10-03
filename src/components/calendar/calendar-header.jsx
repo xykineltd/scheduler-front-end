@@ -14,6 +14,8 @@ import {
   subDays,
   addWeeks,
   subWeeks,
+  addYears,
+  subYears,
   isValid,
 } from "date-fns";
 import { useCalendarContext } from "./calendar-context";
@@ -42,35 +44,19 @@ export default function CalendarHeader() {
   const validCurrentDate =
     currentDate && isValid(currentDate) ? currentDate : new Date();
 
-  // Check if currentMonth is a valid Date object
   const validCurrentMonth =
     currentMonth && isValid(currentMonth) ? currentMonth : new Date();
-
-  // Format the current month and year for display
-
-  const getWeekOfMonthLabel = (date) => {
-    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-    const startDay = startOfMonth.getDay(); // Day of the week the month starts on
-    const currentDay = date.getDate();
-
-    // Calculate which week of the month it is
-    let weekNumber = Math.floor((currentDay + startDay - 1) / 7) + 1;
-
-    if (weekNumber > 4) {
-      weekNumber = 1; // Reset to Week 1 for next month
-    }
-
-    return `Week ${weekNumber} of ${format(date, "MMMM")}`;
-  };
 
   const formattedDisplay = () => {
     switch (calendarView) {
       case "month":
-        return format(validCurrentMonth, "MMMM");
+        return format(validCurrentMonth, "MMMM yyyy");
       case "week":
-        return getWeekOfMonthLabel(validCurrentDate);
+        return `Week ${Math.ceil(validCurrentDate.getDate() / 7)} of ${format(validCurrentDate, "MMMM yyyy")}`;
       case "day":
-        return format(validCurrentDate, "EEEE, MMMM d");
+        return format(validCurrentDate, "EEEE, MMMM d, yyyy");
+      case "year":
+        return format(validCurrentDate, "yyyy"); // Display only the year in "Year View"
       default:
         return "";
     }
@@ -87,6 +73,10 @@ export default function CalendarHeader() {
       case "day":
         setCurrentDate(subDays(validCurrentDate, 1));
         break;
+      case "year":
+        // Move back by one year
+        setCurrentDate(subYears(validCurrentDate, 1)); // Now updating the year view properly
+        break;
       default:
         break;
     }
@@ -102,6 +92,10 @@ export default function CalendarHeader() {
         break;
       case "day":
         setCurrentDate(addDays(validCurrentDate, 1));
+        break;
+      case "year":
+        // Move forward by one year
+        setCurrentDate(addYears(validCurrentDate, 1)); // Now updating the year view properly
         break;
       default:
         break;
@@ -135,7 +129,6 @@ export default function CalendarHeader() {
               className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
               onClick={handleNext}
             >
-              <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
@@ -154,7 +147,7 @@ export default function CalendarHeader() {
 
               <MenuItems
                 transition
-                className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                className="absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               >
                 <div className="py-1">
                   {calendarViewMenu.map(({ label, value }) => (
@@ -162,10 +155,7 @@ export default function CalendarHeader() {
                       key={label}
                       onClick={() => setCalendarView(value)}
                     >
-                      <span
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                      >
+                      <span className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         {label}
                       </span>
                     </MenuItem>
@@ -183,26 +173,10 @@ export default function CalendarHeader() {
 
             <MenuItems
               transition
-              className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <div className="py-1">
-                <MenuItem>
-                  <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
-                    Go to today
-                  </span>
-                </MenuItem>
-              </div>
-              <div className="py-1">
-                {calendarViewMenu.map(({ label, value }) => (
-                  <MenuItem
-                    key={"screen" + label}
-                    onClick={() => setCalendarView(value)}
-                  >
-                    <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
-                      {label}
-                    </span>
-                  </MenuItem>
-                ))}
+                ...
               </div>
             </MenuItems>
           </Menu>
