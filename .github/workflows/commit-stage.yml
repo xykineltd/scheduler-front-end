@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:  # Allows manual triggering of the workflow
+    inputs:
+      deploy:
+        description: 'Do you want to deploy the app?'
+        required: false
+        default: 'no'
 
 env:
   REGISTRY: hub.docker.com
