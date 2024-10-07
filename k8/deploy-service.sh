@@ -19,6 +19,7 @@ kubectl apply -f payroll-ui/payroll-ui.yml
 
 kubectl apply -f redis
 
+kubectl delete -f scheduler-ui
 kubectl apply -f scheduler-ui
 
 kubectl delete -f deploy-civo.yml
