@@ -56,7 +56,7 @@ jobs:
 #      - name: Run tests
 #        run: npm test -- --watchAll=false
   approve-deploy:
-    needs: build
+    needs: docker
     runs-on: ubuntu-latest
     steps:
       - name: Wait for deployment approval
@@ -64,7 +64,7 @@ jobs:
           echo "Waiting for manual approval to deploy..."
         if: github.event.inputs.deploy == 'yes'
   deploy:
-    needs: docker  # Run after the build job completes
+    needs: approve-deploy  # Run after the build job completes
     runs-on: ubuntu-22.04
 
     steps:
