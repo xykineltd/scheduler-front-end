@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY: hub.docker.com
-  IMAGE_NAME: kacytunde/scheduler-ui
+  IMAGE_NAME: scheduler-ui
   VERSION: latest
 
 jobs:
