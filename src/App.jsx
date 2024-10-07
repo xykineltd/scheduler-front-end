@@ -26,7 +26,7 @@ import CreateItenaryBody from "./components/create-itenary/create-itenary-body";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/scheduler">
       <Routes>
         <Route element={<PublicPage />}>
           <Route path="/" element={<LandingPage />} />
