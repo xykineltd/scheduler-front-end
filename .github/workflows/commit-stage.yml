@@ -74,4 +74,5 @@ jobs:
       # Step 3: Deploy to Civo Cloud Kubernetes cluster
       - name: Deploy to Civo Cloud
         run: |
+          kubectl delete -f k8
           kubectl apply -f k8
