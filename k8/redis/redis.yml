@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xykine-redis
+  labels:
+    db: xykine-redis
+spec:
+  selector:
+    matchLabels:
+      db: xykine-redis
+  template:
+    metadata:
+      labels:
+        db: xykine-redis
+    spec:
+      containers:
+        - name: xykine-redis
+          image: redis:7.0
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 200m
+              memory: 100Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: xykine-redis
+  labels:
+    db: xykine-redis
+spec:
+  type: ClusterIP
+  selector:
+    db: xykine-redis
+  ports:
+  - protocol: TCP
+    port: 6379
+    targetPort: 6379
