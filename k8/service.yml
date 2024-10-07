@@ -1,17 +1,17 @@
-# service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: scheduler-ui-service
-  labels:
-    app: scheduler-ui-service
-spec:
-  selector:
-    app: scheduler-ui-service
-  ports:
-    - protocol: TCP
-      port: 80  # The port on which the service will be accessible within the cluster
-      targetPort: 3000  # The port the container listens on
-  type: LoadBalancer  # You could change this to NodePort or LoadBalancer if needed
-  externalIPs:
-    - 74.220.17.243
+## service.yaml
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: scheduler-ui-service
+#  labels:
+#    app: scheduler-ui-service
+#spec:
+#  selector:
+#    app: scheduler-ui-service
+#  ports:
+#    - protocol: TCP
+#      port: 80  # The port on which the service will be accessible within the cluster
+#      targetPort: 3000  # The port the container listens on
+#  type: LoadBalancer  # You could change this to NodePort or LoadBalancer if needed
+#  externalIPs:
+#    - 74.220.17.243
