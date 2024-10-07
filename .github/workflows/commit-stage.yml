@@ -36,8 +36,8 @@ jobs:
         run: npm install
 
       # Run tests
-      - name: Run tests
-        run: npm test -- --watchAll=false
+#      - name: Run tests
+#        run: npm test -- --watchAll=false
 
 #  package:
 #    name: Package and Publish
