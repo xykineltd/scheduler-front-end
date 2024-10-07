@@ -68,6 +68,7 @@ jobs:
       # Step 2: Set up Kubeconfig to access Civo Cloud Kubernetes cluster
       - name: Set up Kubeconfig
         run: |
+          mkdir -p $HOME/.kube  # Create the .kube directory
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       # Step 3: Deploy to Civo Cloud Kubernetes cluster
