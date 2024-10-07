@@ -55,3 +55,22 @@ jobs:
       # Run tests
 #      - name: Run tests
 #        run: npm test -- --watchAll=false
+
+  deploy:
+    needs: build  # Run after the build job completes
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Kubeconfig to access Civo Cloud Kubernetes cluster
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      # Step 3: Deploy to Civo Cloud Kubernetes cluster
+      - name: Deploy to Civo Cloud
+        run: |
+          kubectl apply -f k8
