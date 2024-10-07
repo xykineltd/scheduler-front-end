@@ -57,7 +57,7 @@ jobs:
 #        run: npm test -- --watchAll=false
 
   deploy:
-    needs: build  # Run after the build job completes
+    needs: docker  # Run after the build job completes
     runs-on: ubuntu-22.04
 
     steps:
