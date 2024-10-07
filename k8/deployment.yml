@@ -1,0 +1,25 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler-ui
+  labels:
+    app: scheduler-ui
+spec:
+  replicas: 1  # Number of pods
+  selector:
+    matchLabels:
+      app: scheduler-ui
+  template:
+    metadata:
+      labels:
+        app: scheduler-ui
+    spec:
+      containers:
+        - name: scheduler-ui
+          image: kacytunde/scheduler-ui:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
