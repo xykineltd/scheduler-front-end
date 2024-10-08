@@ -26,11 +26,10 @@ import CreateItenaryBody from "./components/create-itenary/create-itenary-body";
 
 function App() {
   return (
-    <BrowserRouter >
+    <BrowserRouter>
       <Routes>
         <Route element={<PublicPage />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/schedule" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LoginPage />} />
           <Route path="/training" element={<TrainingPage />} />

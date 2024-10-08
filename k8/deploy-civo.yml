@@ -61,7 +61,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-ingress
+  name: edge-service
 spec:
   selector:
     app: edge-service
@@ -84,19 +84,33 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
+  name: payroll-ingressroute
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`xykinehrs.com`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: edge-service
+          port: 80
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
   name: scheduler-ingressroute
   namespace: default
 spec:
   entryPoints:
     - web
   routes:
-    - match: PathPrefix(`/schedule`)
+    - match: Host(`kacytunde.com`) && PathPrefix(`/`)
       kind: Rule
       services:
-        - name: scheduler-service
+        - name: schedule-service
           port: 80
-      middlewares:
-        - name: strip-schedule-prefix
 #apiVersion: networking.k8s.io/v1
 #kind: Ingress
 #metadata:
