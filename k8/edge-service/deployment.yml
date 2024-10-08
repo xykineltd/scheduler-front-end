@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: edge-service
-          image: kacytunde/edge-service
+          image: kacytunde/edge-service:1.0
           imagePullPolicy: Always
           lifecycle:
             preStop:
@@ -27,6 +27,8 @@ spec:
           env:
             - name: SPA_URL
               value: http://payroll-ui
+            - name: SCHEDULER_URL
+              value: http://scheduler-service
             - name: SPRING_CLOUD_CONFIG_URI
               value: http://config-service
             - name: ADMIN_SERVICE_URL

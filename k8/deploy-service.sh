@@ -25,10 +25,11 @@ kubectl apply -f scheduler-ui
 kubectl delete -f deploy-civo.yml
 kubectl apply -f deploy-civo.yml
 
+#kubectl apply -f middleware.yml
+
 sleep 10
 
 kubectl get pods
-
 # restart pods
 # kubectl rollout restart deployment xykine-keycloak
 
