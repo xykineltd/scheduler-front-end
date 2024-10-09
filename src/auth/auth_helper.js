@@ -2,11 +2,11 @@ import { UserManager } from "oidc-client";
 
 const settings = {
   // Kazeem Branch
-  authority: "http://backend-keycloak-auth:8080/realms/Payroll",
-  client_id: "frontend_payroll",
-  redirect_uri: "http://localhost:3000/signin-callback.html",
-  response_type: "code",
-  scope: "openid profile payroll.read",
+  // authority: "http://backend-keycloak-auth:8080/realms/Payroll",
+  // client_id: "frontend_payroll",
+  // redirect_uri: "http://localhost:3000/signin-callback.html",
+  // response_type: "code",
+  // scope: "openid profile payroll.read",
 
   // Bros Demola Branch
 
@@ -18,11 +18,11 @@ const settings = {
 
   // Remote Settings
 
-  // authority: "http://xykine.com/realms/AcedPayroll",
-  // client_id: "frontend_payroll",
-  // redirect_uri: "http://xykinehrs.com/signin-callback.html",
-  // response_type: "code",
-  // scope: "openid profile payroll.read",
+  authority: "http://xykine.com/realms/scheduler",
+  client_id: "frontend_scheduler",
+  redirect_uri: "http://xykinehr.com/signin-callback.html",
+  response_type: "code",
+  scope: "openid profile scheduler.read",
 };
 
 const userManager = new UserManager(settings);
@@ -56,7 +56,7 @@ export const loginUser = () => {
 export const logoutUser = () => {
   clearLocalStorage();
   return userManager.signoutRedirect({
-    post_logout_redirect_uri: "http://localhost:3000",
-    // post_logout_redirect_uri: "http://xykinehrs.com",
+    // post_logout_redirect_uri: "http://localhost:3000",
+    post_logout_redirect_uri: "http://xykinehr.com",
   });
 };

@@ -13,8 +13,13 @@ export default function PrivatePage() {
 
     const token = localStorage.getItem("token");
     if (!token) {
-        console.log("if-->", token)
+        console.log("token", token, currentPath)
         navigate("/");
+    }
+
+    if (token && currentPath === "/" || currentPath === "") {
+        console.log("token", token)
+        navigate("/dashboard");
     }
 
   return (

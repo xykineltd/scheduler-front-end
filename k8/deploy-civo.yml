@@ -1,0 +1,138 @@
+# deployment.yaml
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: scheduler-ui
+#  labels:
+#    app: scheduler-ui
+#spec:
+#  replicas: 1  # Number of pods
+#  selector:
+#    matchLabels:
+#      app: scheduler-ui
+#  template:
+#    metadata:
+#      labels:
+#        app: scheduler-ui
+#    spec:
+#      containers:
+#        - name: scheduler-ui
+#          image: kacytunde/payroll-ui:2.5
+#          ports:
+#            - containerPort: 3000
+#          env:
+#            - name: PORT
+#              value: "3000"
+
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: nginx-deployment
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: nginx
+#  template:
+#    metadata:
+#      labels:
+#        app: nginx
+#    spec:
+#      containers:
+#        - name: nginx
+#          image: kacytunde/scheduler-ui:latest
+#          ports:
+#            - containerPort: 3000
+#apiVersion: traefik.io/v1alpha1
+#kind: Middleware
+#metadata:
+#  name: strip-schedule-prefix
+#spec:
+#  stripPrefix:
+#    prefixes:
+#      - /schedule
+---
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: payroll-ingressroute
+#  namespace: default
+#spec:
+#  entryPoints:
+#    - web
+#  routes:
+#    - match: Host(`xykinehrs.com`) && PathPrefix(`/`)
+#      kind: Rule
+#      services:
+#        - name: edge-service
+#          port: 80
+
+#---
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: scheduler-ingressroute
+#  namespace: default
+#spec:
+#  entryPoints:
+#    - web
+#  routes:
+#    - match: Host(`kacytunde.com`) && PathPrefix(`/`)
+#      kind: Rule
+#      services:
+#        - name: schedule-service
+#          port: 80
+
+#---
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: multi-domain-ingressroute
+#  namespace: default
+#spec:
+#  entryPoints:
+#    - web
+#  routes:
+#    # Rule for xykinehrs.com -> scheduler-service
+#    - match: Host(`xykinehrs.com`) && PathPrefix(`/`)
+#      kind: Rule
+#      services:
+#        - name: scheduler-service
+#          port: 80
+#    # Rule for myotherdomain.com -> other-service
+#    - match: Host(`kacytunde.com`) && PathPrefix(`/`)
+#      kind: Rule
+#      services:
+#        - name: edge-service
+#          port: 80
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: scheduler-route
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`xykinehr.com`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: scheduler-service
+          port: 80
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: payroll-route
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`xykinehrs.com`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: edge-service
+          port: 80

@@ -1,0 +1,91 @@
+name: Commit Stage
+# Trigger the workflow on push or pull request events
+on:
+  push:
+    branches:
+      - deploy
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual triggering of the workflow
+    inputs:
+      deploy:
+        description: 'Do you want to deploy the app?'
+        required: false
+        default: 'no'
+
+env:
+  REGISTRY: hub.docker.com
+  IMAGE_NAME: scheduler-ui
+  VERSION: latest
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-22.04
+    steps:
+      # Checkout the current code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Node.js to the version specified in the `package.json`
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21.5.0'  # Use your desired node version
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+  docker:
+    needs: build  # Ensures this job runs after the build job
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Checkout the current code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Log in to Docker Hub (or another registry)
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} .
+
+      # Push the Docker image to Docker Hub (or another registry)
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+
+      # Run tests
+#      - name: Run tests
+#        run: npm test -- --watchAll=false
+  approve-deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment approval
+        run: |
+          echo "Waiting for manual approval to deploy..."
+        if: github.event.inputs.deploy == 'yes'
+  deploy:
+    needs: approve-deploy  # Run after the build job completes
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Kubeconfig to access Civo Cloud Kubernetes cluster
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p $HOME/.kube  # Create the .kube directory
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
+      # Step 3: Deploy to Civo Cloud Kubernetes cluster
+      - name: Deploy to Civo Cloud
+        run: |
+          kubectl delete -f k8/scheduler-ui
+          kubectl apply -f k8/scheduler-ui
