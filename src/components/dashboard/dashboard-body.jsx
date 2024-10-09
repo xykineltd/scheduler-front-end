@@ -55,9 +55,9 @@ const stats = [
   },
 ];
 const statuses = {
-  Paid: "text-green-700 bg-green-50 ring-green-600/20",
-  Withdraw: "text-gray-600 bg-gray-50 ring-gray-500/10",
-  Overdue: "text-red-700 bg-red-50 ring-red-600/10",
+  Completed: "text-green-700 bg-green-50 ring-green-600/20",
+  Upcoming: "text-blue-600 bg-blue-50 ring-gray-500/10",
+  OnHold: "text-red-700 bg-red-50 ring-red-600/10",
 };
 const days = [
   {
@@ -91,7 +91,7 @@ const days = [
         href: "#",
         amount: "$2,000.00 USD",
         tax: "$130.00",
-        status: "Overdue",
+        status: "On Hold",
         client: "Tuple",
         description: "Logo design",
         icon: ArrowPathIcon,
@@ -119,35 +119,38 @@ const days = [
 const clients = [
   {
     id: 1,
-    name: "Tuple",
+    name: "Meet the President",
+    eventDetails: "Meet president Tinubu to discuss matters related to the upcoming 2025 budget",
     imageUrl: "https://tailwindui.com/img/logos/48x48/tuple.svg",
     lastInvoice: {
-      date: "December 13, 2022",
+      date: "December 13, 2024",
       dateTime: "2022-12-13",
       amount: "$2,000.00",
-      status: "Overdue",
+      status: "Upcoming",
     },
   },
   {
     id: 2,
-    name: "SavvyCal",
+    name: "Fed Executive Meeting",
+    eventDetails: "Attend the 8 editions of federal executive council meeting at the Aso rock.",
     imageUrl: "https://tailwindui.com/img/logos/48x48/savvycal.svg",
     lastInvoice: {
-      date: "January 22, 2023",
+      date: "September 22, 2024",
       dateTime: "2023-01-22",
       amount: "$14,000.00",
-      status: "Paid",
+      status: "Completed",
     },
   },
   {
     id: 3,
-    name: "Reform",
+    name: "Nigeria Independence Day",
+    eventDetails: "Join the president at the Aso rock to celebrate the Nigeria independence Day.",
     imageUrl: "https://tailwindui.com/img/logos/48x48/reform.svg",
     lastInvoice: {
-      date: "January 23, 2023",
+      date: "October 01, 2024",
       dateTime: "2023-01-23",
       amount: "$7,600.00",
-      status: "Paid",
+      status: "Completed",
     },
   },
 ];
@@ -164,12 +167,12 @@ export default function DashboardBody() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
               <div className="flex items-center justify-between">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Recent clients
+                <h2 className="text-base font-xl4 font-semibold leading-7 text-gray-600">
+                  Recent and Upcoming events
                 </h2>
                 <a
                   href="#"
-                  className="text-sm font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+                  className=" font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
                 >
                   View all<span className="sr-only">, clients</span>
                 </a>
@@ -184,11 +187,11 @@ export default function DashboardBody() {
                     className="overflow-hidden rounded-xl border border-gray-200"
                   >
                     <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-                      <img
-                        alt={client.name}
-                        src={client.imageUrl}
-                        className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
-                      />
+                      {/*<img*/}
+                      {/*  alt={client.name}*/}
+                      {/*  src={client.imageUrl}*/}
+                      {/*  className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"*/}
+                      {/*/>*/}
                       <div className="text-sm font-medium leading-6 text-gray-900">
                         {client.name}
                       </div>
@@ -227,26 +230,29 @@ export default function DashboardBody() {
                     </div>
                     <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
                       <div className="flex justify-between gap-x-4 py-3">
-                        <dt className="text-gray-500">Last invoice</dt>
+                        <dt className="text-gray-500"> <div>
+                          {client.eventDetails}
+                        </div></dt>
                         <dd className="text-gray-700">
-                          <time dateTime={client.lastInvoice.dateTime}>
-                            {client.lastInvoice.date}
-                          </time>
+
                         </dd>
                       </div>
                       <div className="flex justify-between gap-x-4 py-3">
-                        <dt className="text-gray-500">Amount</dt>
-                        <dd className="flex items-start gap-x-2">
-                          <div className="font-medium text-gray-900">
-                            {client.lastInvoice.amount}
-                          </div>
+                        <dt className="text-gray-500">
                           <div
-                            className={classNames(
-                              statuses[client.lastInvoice.status],
-                              "rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
-                            )}
+                              className={classNames(
+                                  statuses[client.lastInvoice.status],
+                                  "rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
+                              )}
                           >
                             {client.lastInvoice.status}
+                          </div>
+                        </dt>
+                        <dd className="flex items-start gap-x-2">
+                          <div className="font-medium text-gray-900">
+                            <time dateTime={client.lastInvoice.dateTime}>
+                              {client.lastInvoice.date}
+                            </time>
                           </div>
                         </dd>
                       </div>
