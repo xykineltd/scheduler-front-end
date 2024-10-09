@@ -25,7 +25,7 @@ kubectl apply -f scheduler-ui
 kubectl delete -f deploy-civo.yml
 kubectl apply -f deploy-civo.yml
 
-#kubectl apply -f middleware.yml
+kubectl get ingress
 
 sleep 10
 

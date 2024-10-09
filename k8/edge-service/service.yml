@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-service
+spec:
+  selector:
+    app: edge-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9000
+  type: ClusterIP
 #apiVersion: v1
 #kind: Service
 #metadata:
