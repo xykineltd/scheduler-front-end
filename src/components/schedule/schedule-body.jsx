@@ -6,6 +6,7 @@ import AppDrawer from "../private-page/drawer";
 import AppModal from "../private-page/modal";
 import { useScheduleContext } from "./schedule-context";
 import ScheduleHeader from "./calendar-header";
+import CalenderSideBar from "../calendar/calendar-side-bar";
 
 export default function ScheduleBody() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +21,7 @@ export default function ScheduleBody() {
           sidebarOpen ? "block" : "hidden"
         }`}
       >
-        <ScheduleSideBar />
+        <CalenderSideBar />
 
         {/* Close button for the sidebar in mobile view */}
         <button
