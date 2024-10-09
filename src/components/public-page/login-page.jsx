@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { loginUser } from "../../auth/auth_helper.js";
+import acedLogo from "../images/acedlogo1.png";
 
 const navigation = [
   { name: "More information ", href: "#" },
@@ -28,11 +29,7 @@ export default function LoginPage() {
               <span className="sr-only">
                 FRIS Meeting Schedule, Itenary and Notification System{" "}
               </span>
-              <img
-                alt=""
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              />
+              <img alt="" src={acedLogo} className="h-8 w-auto" />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -73,14 +70,10 @@ export default function LoginPage() {
           <div className="fixed inset-0 z-50" />
           <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              {/* <a href="#" className="-m-1.5 p-1.5">
+              <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  alt=""
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  className="h-8 w-auto"
-                />
-              </a> */}
+                <img alt="" src={acedLogo} className="h-8 w-auto" />
+              </a>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}

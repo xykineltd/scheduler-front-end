@@ -10,6 +10,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser, logoutUser } from "../../auth/auth_helper.js";
+import acedLogo from "../images/acedlogo1.png";
 
 const user = {
   name: "Tom Cook",
@@ -89,11 +90,7 @@ export default function PrivateHeader() {
         <div className="relative flex h-16 justify-between">
           <div className="relative z-10 flex px-2 lg:px-0">
             <div className="flex flex-shrink-0 items-center">
-              {/* <img
-                alt="Your Company"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              /> */}
+              <img alt="" src={acedLogo} className="h-8 w-auto mr-5" />
             </div>
           </div>
           <div className="relative z-10 flex items-center lg:hidden">
