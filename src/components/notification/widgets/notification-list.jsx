@@ -64,25 +64,15 @@ const people = [
 
 export default function Notificationist() {
   return (
-    <ul
-      role="list"
-      className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
-    >
+    <ul>
       {people.map((person) => (
         <li
           key={person.email}
-          className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
+          className="relative flex justify-between gap-x-6 p-2 hover:bg-gray-50"
         >
-          <div className="pointer-events-auto w-full max-w-sm rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition data-[closed]:data-[enter]:translate-y-2 data-[enter]:transform data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-100 data-[enter]:ease-out data-[leave]:ease-in data-[closed]:data-[enter]:sm:translate-x-2 data-[closed]:data-[enter]:sm:translate-y-0">
-            <div className="p-4">
+          <div className="pointer-events-auto w-full rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition data-[closed]:data-[enter]:translate-y-2 data-[enter]:transform data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-100 data-[enter]:ease-out data-[leave]:ease-in data-[closed]:data-[enter]:sm:translate-x-2 data-[closed]:data-[enter]:sm:translate-y-0">
+            <div className="p-1">
               <div className="flex items-start">
-                <div className="flex-shrink-0 pt-0.5">
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                    className="h-10 w-10 rounded-full"
-                  />
-                </div>
                 <div className="ml-3 w-0 flex-1">
                   <p className="text-sm font-medium text-gray-900">
                     Emilia Gates
