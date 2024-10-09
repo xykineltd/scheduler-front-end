@@ -7,10 +7,11 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, BellIcon } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser, logoutUser } from "../../auth/auth_helper.js";
 import acedLogo from "../images/acedlogo1.png";
+import Notificationist from "../notification/widgets/notification-list.jsx";
 
 const user = {
   name: "Tom Cook",
@@ -66,12 +67,6 @@ export default function PrivateHeader() {
     //   href: "book-flight",
     //   current: currentPath === "/book-flight",
     // },
-    {
-      name: "Itinerary Notification",
-      href: "notification",
-      action: () => navigate("notification"),
-      current: currentPath === "/notification",
-    },
   ];
 
   const smallScreenNavigation = [
@@ -133,6 +128,22 @@ export default function PrivateHeader() {
               >
                 Create Itinerary
               </Link>
+
+              <Menu as="div" className="relative ml-4 flex-shrink-0">
+                <div>
+                  <MenuButton className="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">View notifications</span>
+                    <BellIcon className="h-6 w-6" aria-hidden="true" />
+                  </MenuButton>
+                </div>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-60 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                >
+                  <Notificationist />
+                </MenuItems>
+              </Menu>
             </div>
           </div>
           <div className="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center">
