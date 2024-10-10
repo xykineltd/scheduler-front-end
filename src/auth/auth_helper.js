@@ -2,34 +2,24 @@ import { UserManager } from "oidc-client";
 
 const settings = {
   // Kazeem Branch
-  // authority: "http://backend-keycloak-auth:8080/realms/Payroll",
-  // client_id: "frontend_payroll",
-  // redirect_uri: "http://localhost:3000/signin-callback.html",
-  // response_type: "code",
-  // scope: "openid profile payroll.read",
-
-  // Bros Demola Branch
-
-  // authority: "http://backend-keycloak-auth:8080/auth/realms/Frontend",
-  // client_id: "payroll",
-  // redirect_uri: "http://localhost:3000/signin-callback.html",
-  // response_type: "code",
-  // scope: "openid profile payroll.read",
-
-  // Remote Settings
-
-  authority: "http://xykine.com/realms/scheduler",
+  authority: "http://backend-keycloak-auth:8080/realms/scheduler",
   client_id: "frontend_scheduler",
-  redirect_uri: "http://xykinehr.com/signin-callback.html",
+  redirect_uri: "http://localhost:3001/signin-callback.html",
   response_type: "code",
   scope: "openid profile scheduler.read",
+
+  // Remote Settings
+  // authority: "http://xykine.com/realms/scheduler",
+  // client_id: "frontend_scheduler",
+  // redirect_uri: "http://xykinehr.com/signin-callback.html",
+  // response_type: "code",
+  // scope: "openid profile scheduler.read",
 };
 
 const userManager = new UserManager(settings);
 
 export function clearLocalStorage() {
   localStorage.removeItem("token");
-  // localStorage.removeItem("companyCode");
 }
 
 // Add event listeners to handle token expiration
@@ -56,7 +46,7 @@ export const loginUser = () => {
 export const logoutUser = () => {
   clearLocalStorage();
   return userManager.signoutRedirect({
-    // post_logout_redirect_uri: "http://localhost:3000",
-    post_logout_redirect_uri: "http://xykinehr.com",
+    post_logout_redirect_uri: "http://localhost:3001",
+    // post_logout_redirect_uri: "http://xykinehr.com",
   });
 };

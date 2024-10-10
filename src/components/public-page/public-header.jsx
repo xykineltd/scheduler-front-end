@@ -12,8 +12,9 @@ const navigation = [
 
 export default function PublicHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const handleGetStartedClick = () => {
-    loginUser().then((r) => console.log(r));
+
+  const handleGetStartedClick = async () => {
+    await loginUser();
   };
   return (
     <header className="absolute inset-x-0 top-0 z-50">
