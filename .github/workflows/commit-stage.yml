@@ -2,8 +2,6 @@ name: Commit Stage
 # Trigger the workflow on push or pull request events
 on:
   push:
-    branches:
-      - deploy
   pull_request:
     branches:
       - main
