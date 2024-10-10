@@ -113,8 +113,8 @@ export default function CalenderSideBar() {
           )}
         </div>
 
-       {/* Add Person Itinerary Button */}
-       <button
+        {/* Add Person Itinerary Button */}
+        <button
           onClick={openPersonModal} // Open Add Person Itinerary modal
           className="text-white bg-blue-600 py-2 px-4 mb-4 rounded-md hover:bg-indigo-700"
         >
@@ -138,11 +138,11 @@ export default function CalenderSideBar() {
             <div className="ml-4 mt-2">
               <label className="block">
                 <input type="checkbox" className="mr-2" />
-                example1@email.com
+                adebola@gmail.com
               </label>
               <label className="block">
                 <input type="checkbox" className="mr-2" />
-                example2@email.com
+                omotola@gmail.com
               </label>
             </div>
           )}
@@ -264,8 +264,6 @@ export default function CalenderSideBar() {
         </Dialog>
       </Transition>
 
-
-
       {/* Modal for Adding Person Itinerary with Outlook and Google Options */}
       <Transition appear show={isPersonModalOpen} as={React.Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closePersonModal}>
@@ -300,13 +298,13 @@ export default function CalenderSideBar() {
                     Add Person Itinerary
                   </Dialog.Title>
 
-              <div className="mt-4 flex space-x-4 ">
+                  <div className="mt-4 flex space-x-4 ">
                     {/* Button for Outlook */}
                     <a
                       href="https://outlook.live.com/owa/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between border p-4 mb-4 rounded-lg bg-blue-100 hover:bg-blue-200 w-64" 
+                      className="flex items-center justify-between border p-4 mb-4 rounded-lg bg-blue-100 hover:bg-blue-200 w-64"
                     >
                       <div className="flex items-center">
                         <FaMicrosoft className="h-6 w-6 text-blue-500 mr-2" />
@@ -348,8 +346,5 @@ export default function CalenderSideBar() {
         </Dialog>
       </Transition>
     </div>
-
-    
-    
   );
 }

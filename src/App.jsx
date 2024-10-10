@@ -23,42 +23,50 @@ import Schedule from "./components/schedule";
 import Notification from "./components/notification";
 import CreateItenary from "./components/create-itenary";
 import CreateItenaryBody from "./components/create-itenary/create-itenary-body";
+import SignupPage from "./components/public-page/signup-page";
+import { AuthContextProvider } from "./contexts/AuthContext";
+import ApplicationContextProvider from "./contexts/ApplicationContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<PublicPage />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/logout" element={<LoginPage />} />
-          <Route path="/training" element={<TrainingPage />} />
-          <Route path="/help" element={<HelpPage />} />
-        </Route>
-        <Route element={<PrivatePage />}>
-          <Route path="/calendar" element={<Calendar />}>
-            <Route path="" element={<CalendarBody />} />
-          </Route>
-          <Route path="/my-itenary" element={<Schedule />}>
-            <Route path="" element={<ScheduleBody />} />
-          </Route>
+      <AuthContextProvider>
+        <ApplicationContextProvider>
+          <Routes>
+            <Route element={<PublicPage />}>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/logout" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/training" element={<TrainingPage />} />
+              <Route path="/help" element={<HelpPage />} />
+            </Route>
+            <Route element={<PrivatePage />}>
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="" element={<DashboardBody />} />
+              </Route>
+              <Route path="/calendar" element={<Calendar />}>
+                <Route path="" element={<CalendarBody />} />
+              </Route>
+              <Route path="/my-itenary" element={<Schedule />}>
+                <Route path="" element={<ScheduleBody />} />
+              </Route>
 
-          <Route path="/create-itenary" element={<CreateItenary />}>
-            <Route path="" element={<CreateItenaryBody />} />
-          </Route>
+              <Route path="/create-itenary" element={<CreateItenary />}>
+                <Route path="" element={<CreateItenaryBody />} />
+              </Route>
 
-          <Route path="/book-flight" element={<FlightBooking />}>
-            <Route path="" element={<FlightBookingBody />} />
-          </Route>
-          <Route path="/notification" element={<Notification />}>
+              <Route path="/book-flight" element={<FlightBooking />}>
+                <Route path="" element={<FlightBookingBody />} />
+              </Route>
+              {/* <Route path="/notification" element={<Notification />}>
             <Route path="" element={<NotificationBody />} />
-          </Route>
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="" element={<DashboardBody />} />
-          </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          </Route> */}
+            </Route>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </ApplicationContextProvider>
+      </AuthContextProvider>
     </BrowserRouter>
   );
 }

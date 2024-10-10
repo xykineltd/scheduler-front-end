@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { createContext, useState } from "react";
 import { isEmpty } from "lodash";
-import {getUser} from "../auth/auth_helper.js";
+import { getUser } from "../auth/auth_helper.js";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const userRoles = {
   VENDOR: "vendor",
@@ -15,67 +15,53 @@ export const userRoles = {
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState();
-  const [authCompanyCode, setAuthCompanyCode] = useState(null);
-  const [code, setCode] = useState("");
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
 
+  const navigate = useNavigate();
 
-  getUser()
-      .then((data) => {
-        if (data.profile.email !== user?.email) setUser(data.profile);
-        if (data.access_token) {
-          localStorage.setItem("token", JSON.stringify(data.access_token));
+  const location = useLocation();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await getUser();
+        if (data.profile.email !== user?.email) {
+          setUser(data.profile);
+          localStorage.setItem("user", JSON.stringify(data.profile));
         }
-      })
-      .catch((error) => {
+        if (data.access_token) {
+          localStorage.setItem("token", data.access_token);
+          setToken(data.access_token);
+          if (location.pathname === "/dashboard") navigate("/dashboard");
+        }
+      } catch (error) {
         console.log({ success: false, error: error.message });
-      })
-      .finally(() => {});
+      }
+    };
 
-  const logout = () => {
-    localStorage.removeItem("centralizedCompanyCode");
-    localStorage.removeItem("user");
-    localStorage.removeItem("companyId");
-    setUser("");
-  };
-
-  const {
-    data: company,
-    refetch: refetchCentralizedCompany,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["companyCode"],
-    queryFn: () => {},
-    enabled: !!code,
-  });
-
-  const login = (loginDetail) => {
-    // window.open('/oauth2/authorization/keycloak', '_self')
-    setAuthCompanyCode(loginDetail);
-    setCode(loginDetail?.companyCode);
-  };
-
-  useEffect(() => {
-    if (code) refetchCentralizedCompany();
-  }, [code]);
-
-  useEffect(() => {
-    if (!isEmpty(company) && company?.status !== 404) {
-      setUser(authCompanyCode);
-      localStorage.setItem("user", JSON.stringify(authCompanyCode));
-      //TODO handle scenario where we switch the company, update the company at that point
-      localStorage.setItem("companyId", JSON.stringify(company.companyID));
-    }
-    // setCode("")
-  }, [company, isLoading]);
+    fetchUser();
+  }, [navigate]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
   }, []);
+
+  const logout = () => {
+    localStorage.removeItem("centralizedCompanyCode");
+    localStorage.removeItem("user");
+    localStorage.removeItem("companyId");
+    localStorage.removeItem("token");
+    setUser(null);
+    setToken("");
+  };
 
   const isRole = (role) => {
     return role === user?.role;
@@ -86,12 +72,9 @@ export const AuthContextProvider = ({ children }) => {
       value={{
         user,
         logout,
-        login,
         isRole,
         setUser,
-        isLoading,
-        isError,
-        company,
+        token,
       }}
     >
       {children}

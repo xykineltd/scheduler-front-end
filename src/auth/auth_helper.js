@@ -29,6 +29,7 @@ const settings = {
   // response_type: "code",
   // scope: "openid profile scheduler.read",
 
+  // Remote Settings
   // authority: "http://xykine.com/realms/scheduler",
   // client_id: "frontend_scheduler",
   // redirect_uri: "http://xykinehr.com/signin-callback.html",
@@ -40,7 +41,6 @@ const userManager = new UserManager(settings);
 
 export function clearLocalStorage() {
   localStorage.removeItem("token");
-  // localStorage.removeItem("companyCode");
 }
 
 // Add event listeners to handle token expiration
@@ -71,5 +71,6 @@ export const logoutUser = () => {
     // post_logout_redirect_uri: "http://xykinehr.com",
     // post_logout_redirect_uri: "http://localhost:3000",
     // post_logout_redirect_uri: "http://xykinehr.com",
+
   });
 };

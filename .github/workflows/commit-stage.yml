@@ -5,12 +5,12 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  # Allows manual triggering of the workflow
+  workflow_dispatch: # Allows manual triggering of the workflow
     inputs:
       deploy:
-        description: 'Do you want to deploy the app?'
+        description: "Do you want to deploy the app?"
         required: false
-        default: 'no'
+        default: "no"
 
 env:
   REGISTRY: hub.docker.com
@@ -30,13 +30,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '21.5.0'  # Use your desired node version
+          node-version: "21.5.0" # Use your desired node version
 
       # Install dependencies
       - name: Install dependencies
         run: npm install
   docker:
-    needs: build  # Ensures this job runs after the build job
+    needs: build # Ensures this job runs after the build job
     runs-on: ubuntu-22.04
 
     steps:
@@ -57,8 +57,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
       # Run tests
-#      - name: Run tests
-#        run: npm test -- --watchAll=false
+  #      - name: Run tests
+  #        run: npm test -- --watchAll=false
   approve-deploy:
     needs: docker
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
           echo "Waiting for manual approval to deploy..."
         if: github.event.inputs.deploy == 'yes'
   deploy:
-    needs: approve-deploy  # Run after the build job completes
+    needs: approve-deploy # Run after the build job completes
     runs-on: ubuntu-22.04
 
     steps:
@@ -83,7 +83,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
       # Step 3: Deploy to Civo Cloud Kubernetes cluster
-      - name: Deploy to Civo Cloud
-        run: |
-          kubectl delete -f k8/scheduler-ui
-          kubectl apply -f k8/scheduler-ui
+      # - name: Deploy to Civo Cloud
+      #   run: |
+      #     kubectl delete -f k8/scheduler-ui
+      #     kubectl apply -f k8/scheduler-ui
