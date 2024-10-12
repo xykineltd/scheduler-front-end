@@ -62,16 +62,19 @@ export const selectOptionInit = [
 
 export const baseUrls = {
   scheduler: "http://localhost:9005/api/",
-  // compute: "http://localhost:9002/compute/",
 };
 
-const getHeader = () => {
-  const token = localStorage.getItem("token");
-  return {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + JSON.parse(token),
-  };
+const getHeader = (hasToken) => {
+  if (hasToken) {
+    const token = localStorage.getItem("token");
+    return {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + JSON.parse(token),
+    };
+  } else {
+    return { Accept: "application/json" };
+  }
 };
 
 export const getQueryMethod = async (urlPath, service = "scheduler") => {
@@ -87,9 +90,10 @@ export const getMutationMethod = async (
   method,
   urlPath,
   body,
-  service = "scheduler"
+  service = "scheduler",
+  hasToken = true
 ) => {
-  const headers = getHeader();
+  const headers = getHeader(hasToken);
   const response = await fetch(`${baseUrls[service]}${urlPath}`, {
     method,
     headers,

@@ -31,7 +31,8 @@ export default function SignupPage() {
 
   const { mutateAsync: createUser, isLoading: isLoadingCreateUser } =
     useMutation({
-      mutationFn: (body) => getMutationMethod("POST", "users", body),
+      mutationFn: (body) =>
+        getMutationMethod("POST", "users/create", [body], "scheduler", false),
       onSuccess: (data) => {
         navigate("/");
       },
